@@ -1,0 +1,25 @@
+{
+  "name": "multivision",
+  "description": "Travel-Points of Interest",
+  "main": "index.js",
+  "authors": [
+    "Elan Elangovan"
+  ],
+  "license": "ISC",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "toastr": "~2.1.2",
+    "angular": "~1.4.8",
+    "angular-resource": "~1.4.8",
+    "angular-route": "~1.4.8"
+  }
+}
