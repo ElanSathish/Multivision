@@ -1,9 +1,7 @@
 
 /*Calling all the Frameworks*/
 var express = require('express'),
-    stylus = require('stylus'),
-    morgan = require('morgan'),
-    bodyParser = require("body-parser"),
+
     mongoose = require('mongoose');
 
 /*Assigning environment if not set up by node default then the value will be assigned as "development"*/
@@ -11,25 +9,10 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 /*Creating the application*/
 var app = express();
-function compile(str, path){
-    return(stylus(str).set('filename', path));
-};
-
-/*Express Configure*/
-    app.set('views', __dirname + '/server/views');
-    app.set('view engine','jade' );
-
-//Depricated: app.use(logger());
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(morgan('combined'));
-    app.use(stylus.middleware(
-        {
-            src: __dirname+'/public',
-            compile: compile
-        }
-    ));
-    app.use(express.static(__dirname+'/public'));
-
+var config={
+rootPath: __dirname
+}
+require('./server/config/express')(app, config)
 /*Mongoose Database*/
 if(env === 'development'){
 mongoose.connect('mongodb://localhost/multivision');
@@ -45,31 +28,32 @@ db.once('open', function callback(){
     console.log("Mongodb opened");
 });
 
-/*Creating Schema*/
+/*Creating Schema --- Commented out as of chap 4 - 03
 var mongooseSchema = mongoose.Schema({message: 'string'});
 var Message = mongoose.model('Message', mongooseSchema);
 var mongoMessage;
 Message.findOne().exec(function (err, messageDoc){
     mongoMessage = messageDoc.message;
-});
+});*/
 
 
 /*Page Rendering*/
-app.get('/partials/:partialPath', function(req, res){
- res.render('partials/' + req.params.partialPath);
+app.get('/partials/*', function(req, res){
+ res.render('../../public/app/' + req.params[0]);
  console.log("Got the request");
  });
 
 app.get('*', function(req, res){
-    res.render('index', {
+    res.render('index'); /*Commented out as of chap 4 - 03
+    {
         mongoMessage: mongoMessage
-    });
+    });*/
 });
 
 
 
 /*Port Assigning*/
-var port = process.env.PORT || 3030;
+var port = process.env.PORT || 3030
 app.listen(port);
 
 /*Logging to the Console*/
